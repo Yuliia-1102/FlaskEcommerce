@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit shop item {% endblock %}
+
+{% block body %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <table class="table table-dark table-hover">
+        <tr>
+            <th>{{ form.product_name.label }}</th>
+            <th>{{ form.previous_price.label }} (UAH)</th>
+            <th>Current price (UAH)</th>
+            <th>{{ form.in_stock.label }}</th>
+            <th>Categories</th>
+            <th>{{ form.product_description.label }}</th>
+            <th>Picture</th>
+        </tr>
+
+        <tr>
+            <td>{{ form.product_name }}</td>
+            <td>{{ form.previous_price(type="number", min="0.99", step="0.01", style="max-width: 180px") }}</td>
+            <td>{{ form.current_price(type="number", min="0.99", step="0.01", style="max-width: 180px") }}</td>
+            <td>{{ form.in_stock(style="max-width: 140px") }}</td>
+            <td>{{ form.categories }}</td>
+            <td>{{ form.product_description }}</td>
+            <td>{{ form.product_picture(style="max-width: 270px") }}</td>
+        </tr>
+    </table>
+
+    <div class="d-flex justify-content-end">
+        {{ form.update_product() }}
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %} Search {% endblock %}
+
+{% block body %}
+
+{% if items | length < 1 %}
+    <h1 class="text-center mt-5" style="color: white;"> No items found </h1>
+{% else %}
+
+{% if category %}
+    <h1 class="text-center my-5" style="color: white;"> Category: {{ category.category_name }} </h1>
+{% endif %}
+
+<div class="container text-center my-5">
+    <div class="row" style="margin: 8px; background-color: rgb(219, 218, 218);" id="column">
+
+        {% for item in items %}
+
+         {% if item.in_stock > 0 %}
+        <div class="col position-relative p-3" style="background-color: white;">
+            <img src="{{ url_for('admin.get_image', filename=item.product_picture.split('/')[-1]) }}" alt="" style="height: 212px; width: auto; border-radius: 10px;">
+
+            <button class="btn position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#modal{{ item.id }}">
+                <i class="fa-solid fa-circle-info"></i>
+            </button>
+
+            <div class="row" style="margin-top: 5px;">
+                <h6 style="color: gray;">{{ item.product_name }}</h6>
+            </div>
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="col">
+                    <h5 style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">{{ item.current_price }} UAH</h5>
+                    {% if item.previous_price|float > item.current_price %}
+                        <strike><p style="color: gray;"> {{ item.previous_price }} UAH</p></strike>
+                    {% endif %}
+                </div>
+
+                <div class="col">
+                    {% if current_user.id != 1 %}
+                        <a href="/add-to-cart/{{ item.id }}">Add</a>
+                    {% else %}
+                        <a>Add</a>
+                    {% endif %}
+
+                    {% if item.previous_price|float > item.current_price %}
+                         <h5 style="color: red; margin-top: 15px"> -{{ item.discount }}%</h5>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <p>{{ item.in_stock }} Items Left</p>
+            </div>
+        </div>
+
+        {% else %}
+
+         <div class="col position-relative p-3" style="background-color: white; filter: grayscale(100%);">
+            <img src="{{ url_for('admin.get_image', filename=item.product_picture.split('/')[-1]) }}" alt="" style="height: 212px; width: auto; border-radius: 10px;">
+
+            <button class="btn position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#modal{{ item.id }}">
+                <i class="fa-solid fa-circle-info"></i>
+            </button>
+
+            <div class="row" style="margin-top: 5px;">
+                 <h6 style="color: gray;"> {{ item.product_name }} </h6>
+            </div>
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="col">
+                    <h5 style="font-weight: 600; font-family: 'Times New Roman', Times, serif;  color: gray;">{{ item.current_price }} UAH</h5>
+                    {% if item.previous_price|float > item.current_price %}
+                        <strike><p style="color: gray;"> {{ item.previous_price }} UAH</p></strike>
+                    {% endif %}
+                </div>
+
+                <div class="col">
+                    {% if item.previous_price|float > item.current_price %}
+                         <h5 style="color: gray; margin-top: 15px"> -{{ item.discount }}%</h5>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <strong>Not in stock</strong>
+            </div>
+        </div>
+        {% endif %}
+    
+        {% endfor %}
+
+    </div>
+
+{% for item in items %}
+    <div class="modal fade" id="modal{{ item.id }}" tabindex="-1" aria-labelledby="modalLabel{{ item.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel{{ item.id }}">{{ item.product_name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p style="text-align: justify">{{ item.product_description }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

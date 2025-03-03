@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %} Cart {% endblock %}
+
+{% block body %}
+
+<div class="container my-5"> {# m - margin, y - top+bottom #}
+    <div class="row">
+
+        {% if cart %}
+
+        <h1 class="text-center mb-5" style="color: white;">Shopping Cart</h1> {# mb - margin bottom #}
+        <div class="col-sm-8"> {# sm - для маленьких екранів буде одна колонка #}
+            <div class="card">
+                <div class="card-body">
+
+                   {% for item in cart %}
+
+                   <div class="row">
+                        <div class="col-sm-3 text-center align-self-center"> {# img-thumbnail = frame; img-fluid = адаптивність; не виходить за межі контейнера на малих екранах #}
+                            <img src="{{ item.product.product_picture }}" alt="{{ item.product.product_name }}" class="img-fluid img-thumbnail shadow-sm" height="150px" width="150px">
+                        </div>
+
+                        <div class="col-sm-9">
+                            <div>
+                                <h3>{{ item.product.product_name }}</h3>
+
+                                <div class="my-3">
+                                      <label>Quantity</label>
+
+                                      <button class="minus-cart btn" id="{{ item.id }}">
+                                          <i class="fas fa-minus-square fa-lg"></i> {# icon from font awesome #}
+                                      </button>
+
+                                      <span> {{ item.quantity }} </span> {# attribute of span is id for communication with JS #}
+
+                                      <button class="plus-cart btn" id="{{ item.id }}">
+                                          <i class="fas fa-plus-square fa-lg"></i> {# icon from font awesome #}
+                                      </button>
+                                </div>
+
+                                <div class="d-flex justify-content-between"> {# контейнер, де р-зліва, а-справа і між ними макс. відстань #}
+                                    <p class="mb-0"> {# strong = bold #}
+                                        <strong> {{ item.product.current_price }} UAH </strong>
+                                    </p>
+
+                                    <a href="" class="remove-cart btn btn-sm" id="{{ item.id }}">
+                                        Remove
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+
+                    <hr>
+
+                   {% endfor %}
+
+               </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3> Cart Summary </h3>
+                    <hr>
+                    <ul class="list-group">
+                        {% for item in cart %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                            <span><strong>{{ item.product.product_name }}</strong></span>
+
+                            <span>{{ item.product.current_price }} <i class="fa-solid fa-xmark"></i>
+                                <span id="quantity{{ item.id }}">{{ item.quantity }}</span>
+                            </span>
+                        </li>
+
+                        {% endfor %}
+
+                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                             Amount
+                             <span>
+                                 <span id="amount_right">{{ amount }}</span> UAH
+                             </span>
+                         </li>
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                            <div style="margin-top: 15px;">
+                                <strong>Total</strong><small> (Including Shipping)</small>
+                            </div>
+
+                            <span style="margin-top: 15px;">
+                                <strong><span id="total_amount">{{ total }}</span> UAH</strong>
+                            </span>
+                        </li>
+                    </ul>
+
+                     <div class="d-grid">
+                         <a href="/place-order" class="btn btn-primary">Place Order</a>
+                     </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+
+        <h1 class="text-center mb-5" style="color: white;">Your Cart is empty</h1>
+
+        {% endif %}
+   </div>
+</div>
+
+
+{% endblock %}

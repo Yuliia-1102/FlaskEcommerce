@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+<div class="container my-5">
+    <div class="row align-items-start">
+
+        <div class="col-md-3 border-end pe-4">
+            <h3 class="text-white">Welcome, <span class="text-capitalize">{{ customer.username }}</span></h3>
+            <ul class="list-unstyled mt-3">
+                {% if current_user.id == 1 %}
+                    <li class="d-grid"><a href="/customers" class="btn btn-primary">View Customers <i class="fa-solid fa-user"></i> </a></li>
+                    <li class="d-grid"><a href="/view-orders" class="btn btn-primary mt-2">View Orders <i class="fa-solid fa-truck-fast"></i> </a></li>
+                    <li class="d-grid"><a href="/shop-items" class="btn btn-primary mt-2">Edit Shop Items <i class="fa-solid fa-cart-shopping"></i> </a></li>
+                    <li class="d-grid"><a href="/add-shop-items" class="btn btn-primary mt-2">Add Shop Items <i class="fa-solid fa-cart-shopping"></i> </a></li>
+                {% endif %}
+
+                <li class="d-grid"><a href="/change-password/{{ customer.id }}" class="btn btn-info mt-2">Change Password</a></li>
+
+                {% if current_user.id != 1 %}
+                    <li class="d-grid"><a href="/" class="btn btn-info mt-2">View Items</a></li>
+                    <li class="d-grid"><a href="/orders" class="btn btn-info mt-2">View Orders</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row justify-content-center">
+                <div class="col-md-10 p-4 shadow-lg rounded bg-white">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card p-3 border-0">
+                                <h4 class="text-primary"><i class="bi bi-person-circle"></i> Username: {{ customer.username }}</h4>
+                                <p><i class="bi bi-envelope"></i> Email: {{ customer.email }}</p>
+                                <p><i class="bi bi-calendar-check"></i> Account created: {{ customer.date_joined.strftime('%d %B %Y') }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            <img src="{{ url_for('auth.get_image', filename=customer.profile_pic.split('/')[-1]) }}" alt="Profile Picture"  class="avatar mt-2 rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover;">
+
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                 {{ form.hidden_tag() }}
+                                 <td>{{ form.profile_pic(style="width: 250px; margin-top: 11px") }}</td>
+                                 <td>{{ form.update_picture(style="margin-top: 6px") }}</td>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
